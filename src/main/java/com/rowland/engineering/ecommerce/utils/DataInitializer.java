@@ -9,8 +9,11 @@ import jakarta.annotation.PostConstruct;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Component;
+
+import java.util.Arrays;
 import java.util.HashSet;
 import java.util.List;
+
 
 
 @Component
@@ -25,6 +28,11 @@ public class DataInitializer {
     @PostConstruct
     public void init() {
         try {
+            List<Role> roles = Arrays.asList(
+                    new Role(RoleName.ROLE_USER),
+                    new Role(RoleName.ROLE_ADMIN)
+            );
+            roleRepository.saveAll(roles);
             persistUsers();
             persistProducts();
         } catch (Exception e) {

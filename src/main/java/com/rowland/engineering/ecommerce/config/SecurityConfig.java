@@ -59,7 +59,7 @@ public class SecurityConfig {
                 .authenticationEntryPoint(unauthorizedHandler)
                 .and()
                 .authorizeHttpRequests()
-                .requestMatchers("/api/auth/**",
+                .requestMatchers("/api/v1/auth/**",
                         "*/products/all",
                         "*/products/supermarket",
                         "*/products/computing",
@@ -74,12 +74,12 @@ public class SecurityConfig {
                         "*/products/view/**",
                         "*/users/getVendors",
                         "*/products/vendor/**",
-                        "/v3/api-docs",
-                        "/actuator/**",
-                        "/prometheus/**",
-                        "/v3/api-docs/**",
-                        "/swagger-ui/**",
-                        "swagger-ui.html"
+                        "*/v3/api-docs",
+                        "*/actuator/**",
+                        "*/prometheus/**",
+                        "*/v3/api-docs/**",
+                        "*/swagger-ui/**",
+                        "*/swagger-ui.html"
                 )
                 .permitAll()
                 .anyRequest()
