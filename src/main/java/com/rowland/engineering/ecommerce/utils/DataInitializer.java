@@ -5,35 +5,31 @@ import com.rowland.engineering.ecommerce.model.*;
 import com.rowland.engineering.ecommerce.repository.ProductRepository;
 import com.rowland.engineering.ecommerce.repository.RoleRepository;
 import com.rowland.engineering.ecommerce.repository.UserRepository;
+import jakarta.annotation.PostConstruct;
 import lombok.RequiredArgsConstructor;
-import org.springframework.boot.CommandLineRunner;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Component;
-import java.util.Arrays;
 import java.util.HashSet;
 import java.util.List;
 
-import static com.rowland.engineering.ecommerce.model.RoleName.ROLE_ADMIN;
-import static com.rowland.engineering.ecommerce.model.RoleName.ROLE_USER;
 
 @Component
 @RequiredArgsConstructor
-public class DataInitializer implements CommandLineRunner {
+public class DataInitializer {
 
     private final RoleRepository roleRepository;
     private final ProductRepository productRepository;
     private final UserRepository userRepository;
     private final PasswordEncoder passwordEncoder;
 
-    @Override
-    public void run(String... args) throws Exception {
-        List<Role> roles = Arrays.asList(
-                new Role(ROLE_USER),
-                new Role(ROLE_ADMIN)
-        );
-        roleRepository.saveAll(roles);
-        persistUsers();
-        persistProducts();
+    @PostConstruct
+    public void init() {
+        try {
+            persistUsers();
+            persistProducts();
+        } catch (Exception e) {
+            System.err.println("Error during data initialization: " + e.getMessage());
+        }
     }
 
     private void persistUsers() {
