@@ -11,7 +11,7 @@ CREATE TABLE user_roles (
 );
 
 CREATE TABLE product (
-  id BIGINT PRIMARY KEY AUTO_INCREMENT,
+  id INT PRIMARY KEY AUTO_INCREMENT,
   product_name VARCHAR(40) NOT NULL,
   selling_price DECIMAL(10, 2) NOT NULL,
   amount_discounted DECIMAL(10, 2) NOT NULL,
@@ -52,7 +52,7 @@ CREATE TABLE cart_table (
 );
 
 CREATE TABLE cart_checked_out (
-  id BIGINT PRIMARY KEY AUTO_INCREMENT,
+  id INT PRIMARY KEY AUTO_INCREMENT,
   last_name VARCHAR(255) NOT NULL,
   first_name VARCHAR(255) NOT NULL,
   phone_number VARCHAR(20) NOT NULL,
@@ -71,14 +71,14 @@ CREATE TABLE cart_checked_out (
 );
 
 CREATE TABLE cart_item (
-  id BIGINT PRIMARY KEY AUTO_INCREMENT,
+  id INT PRIMARY KEY AUTO_INCREMENT,
   product_name VARCHAR(255) NOT NULL,
   product_id INT NOT NULL,
   image_url VARCHAR(2000) NOT NULL,
   price DOUBLE NOT NULL,
   quantity INT NOT NULL,
   subtotal DOUBLE NOT NULL,
-  cart_checked_out_id BIGINT,
+  cart_checked_out_id INT,
   FOREIGN KEY (cart_checked_out_id) REFERENCES cart_checked_out(id)
 );
 

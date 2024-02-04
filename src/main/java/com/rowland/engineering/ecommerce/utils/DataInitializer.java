@@ -56,6 +56,8 @@ public class DataInitializer {
                 .mobile("+234121212")
                 .isVendor("True")
                 .vendorCompany("Jumia Inc Ltd")
+                .profilePictureUrl("https://files.fm/f/kevyz39hqu")
+                .companyLogoUrl("https://files.fm/u/sc8wyknn6m")
                 .territory("NIGERIA")
                 .build();
 
@@ -75,10 +77,10 @@ public class DataInitializer {
         Product product1 = Product.builder()
                 .productName("Blazer")
                 .category(Category.OTHERS)
-                .sellingPrice(900.0)
+                .sellingPrice(1000.0)
                 .amountDiscounted(100.0)
                 .percentageDiscount(10)
-                .quantity(20)
+                .quantity(25)
                 .description("Polo Wool Twill Blazer.")
                 .imageUrl("https://www.optimized-rlmedia.io/is/image/PoloGSI/s7-1189461_lifestyle?$rl_df_pdp_5_7_lif$")
                 .userId(2L)
@@ -88,7 +90,7 @@ public class DataInitializer {
                 .productName("Corduroy Trouser")
                 .category(Category.OTHERS)
                 .sellingPrice(500.0)
-                .amountDiscounted(500.0)
+                .amountDiscounted(250.0)
                 .percentageDiscount(50)
                 .quantity(100)
                 .description("Stretch Slim Fit Corduroy Trouser.")
@@ -100,7 +102,7 @@ public class DataInitializer {
                 .productName("Washing Machine")
                 .category(Category.APPLIANCES)
                 .sellingPrice(36000.0)
-                .amountDiscounted(4000.0)
+                .amountDiscounted(3600.0)
                 .percentageDiscount(10)
                 .quantity(12)
                 .description("Washing machine with a sleek design.")
@@ -111,7 +113,7 @@ public class DataInitializer {
         Product product4 = Product.builder()
                 .productName("Iphone X")
                 .category(Category.PHONES)
-                .sellingPrice(90000.09)
+                .sellingPrice(90000.0)
                 .amountDiscounted(0.0)
                 .percentageDiscount(0)
                 .quantity(56)
@@ -193,7 +195,7 @@ public class DataInitializer {
                 .productName("Milo Chocolate")
                 .category(Category.SUPERMARKET)
                 .sellingPrice(3000.0)
-                .amountDiscounted(300.0)
+                .amountDiscounted(600.0)
                 .percentageDiscount(20)
                 .quantity(33)
                 .description("Chocolate milk top brand.")
@@ -208,7 +210,7 @@ public class DataInitializer {
                 .amountDiscounted(1500.0)
                 .percentageDiscount(50)
                 .quantity(30)
-                .description("Chocolate milk top brand.")
+                .description("Body lotion top brand.")
                 .imageUrl("https://e7.pngegg.com/pngimages/281/637/png-clipart-nivea-nourishing-body-lotion-nivea-nourishing-body-lotion-nivea-nourishing-body-milk-400-ml-400-ml-cream-body-milk-poster-cream-body-wash.png")
                 .userId(2L)
                 .build();
@@ -224,7 +226,6 @@ public class DataInitializer {
                 .userId(2L)
                 .build();
         productRepository.saveAll(List.of(product1, product2, product3, product4, product5, product6, product7, product8, product9, product10, product11, product12, product13));
-
         System.out.println("Products persisted to the database.");
     }
 }

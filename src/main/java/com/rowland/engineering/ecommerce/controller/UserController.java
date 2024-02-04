@@ -26,7 +26,7 @@ import java.util.Optional;
 
 @CrossOrigin("*")
 @RestController
-@RequestMapping("/api/users")
+@RequestMapping("/api/v1/users")
 @RequiredArgsConstructor
 @SecurityRequirement(name = "bearerAuth")
 @Tag(name = "User")
@@ -95,8 +95,6 @@ public class UserController {
         return userService.updateUserInformation(companyLogo,  profilePicture,  userId, vendorCompany,  territory, mobile, email, username, lastName , firstName);
 
     }
-
-
 
 
 }

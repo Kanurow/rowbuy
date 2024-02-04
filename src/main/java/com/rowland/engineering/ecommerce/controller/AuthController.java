@@ -30,7 +30,7 @@ import java.util.Collections;
 
 @CrossOrigin("*")
 @RestController
-@RequestMapping("/api/auth")
+@RequestMapping("/api/v1/auth")
 @RequiredArgsConstructor
 @Tag(name = "Authentication - Registration /Sign In")
 public class AuthController {
