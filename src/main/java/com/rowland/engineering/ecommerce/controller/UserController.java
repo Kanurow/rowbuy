@@ -1,11 +1,7 @@
 package com.rowland.engineering.ecommerce.controller;
 
-import com.fasterxml.jackson.databind.ser.FilterProvider;
-import com.fasterxml.jackson.databind.ser.PropertyFilter;
-import com.fasterxml.jackson.databind.ser.impl.SimpleBeanPropertyFilter;
-import com.fasterxml.jackson.databind.ser.impl.SimpleFilterProvider;
+
 import com.rowland.engineering.ecommerce.dto.*;
-import com.rowland.engineering.ecommerce.model.Category;
 import com.rowland.engineering.ecommerce.model.User;
 import com.rowland.engineering.ecommerce.security.CurrentUser;
 import com.rowland.engineering.ecommerce.security.UserPrincipal;
@@ -81,7 +77,7 @@ public class UserController {
             description = "Updates registered users information",
             summary = "Enables user update profile information"
     )
-    @PutMapping("/updateUserInformation")
+    @PatchMapping("/updateUserInformation")
     public ResponseEntity<String> updateUserInformation(@Valid @RequestParam("companyLogo") MultipartFile companyLogo,
                                                        @RequestParam("profilePicture") MultipartFile profilePicture,
                                                        @RequestParam("userId") String userId,

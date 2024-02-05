@@ -41,20 +41,9 @@ public class DataInitializer {
     }
 
     private void persistUsers() {
+
         User user1 = User.builder()
                 .id(1L)
-                .firstName("Rowland")
-                .lastName("Kanu")
-                .dateOfBirth("1996-10-05")
-                .username("flames")
-                .email("kanurowland92@gmail.com")
-                .password(passwordEncoder.encode("rowland12"))
-                .mobile("+2348143358911")
-                .isVendor("False")
-                .build();
-
-        User user2 = User.builder()
-                .id(2L)
                 .firstName("Samuel")
                 .lastName("Kanu")
                 .dateOfBirth("1999-03-15")
@@ -62,22 +51,15 @@ public class DataInitializer {
                 .email("kanusam@gmail.com")
                 .password(passwordEncoder.encode("sammy12"))
                 .mobile("+234121212")
-                .isVendor("True")
-                .vendorCompany("Jumia Inc Ltd")
-                .profilePictureUrl("https://files.fm/f/kevyz39hqu")
-                .companyLogoUrl("https://files.fm/u/sc8wyknn6m")
-                .territory("NIGERIA")
+                .isVendor("False")
                 .build();
 
         Role roleUser = roleRepository.findByName(RoleName.ROLE_USER)
                 .orElseThrow(() -> new AppException("User Role not set."));
-        Role roleAdmin = roleRepository.findByName(RoleName.ROLE_ADMIN)
-                .orElseThrow(() -> new AppException("Admin Role not set."));
 
         user1.setRoles(new HashSet<>(List.of(roleUser)));
-        user2.setRoles(new HashSet<>(List.of(roleAdmin)));
 
-        userRepository.saveAll(List.of(user1, user2));
+        userRepository.save(user1);
 
     }
 

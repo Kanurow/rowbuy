@@ -258,7 +258,7 @@ public class ProductController {
             summary = "Users vendor Id to get products created by vendor"
     )
     @GetMapping("/vendor/{userId}")
-    public ResponseEntity<List<ProductResponse>> getAllPagedVendorsProducts(
+    public ResponseEntity<List<ProductResponse>> getAllVendorsProducts(
 
             @PathVariable String userId) {
         List<ProductResponse> allProducts = productService.getAllVendorProducts(userId);
