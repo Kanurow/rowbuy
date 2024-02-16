@@ -1034,15 +1034,14 @@ class ProductServiceTest {
 
         when(productRepository.findById(mockProduct.getId())).thenReturn(Optional.of(mockProduct));
 
-        Optional<Product> productResponse = productService.getProduct(mockProduct.getId());
+        Product productResponse = productService.getProduct(mockProduct.getId());
         verify(productRepository, times(1)).findById(mockProduct.getId());
 
-        assertTrue(productResponse.isPresent());
-        assertEquals(mockProduct.getId(), productResponse.get().getId());
-        assertEquals(mockProduct.getProductName(), productResponse.get().getProductName());
-        assertEquals(mockProduct.getCategory(), productResponse.get().getCategory());
-        assertEquals(mockProduct.getDescription(), productResponse.get().getDescription());
-        assertEquals(mockProduct.getQuantity(), productResponse.get().getQuantity());
+        assertEquals(mockProduct.getId(), productResponse.getId());
+        assertEquals(mockProduct.getProductName(), productResponse.getProductName());
+        assertEquals(mockProduct.getCategory(), productResponse.getCategory());
+        assertEquals(mockProduct.getDescription(), productResponse.getDescription());
+        assertEquals(mockProduct.getQuantity(), productResponse.getQuantity());
     }
 
 

@@ -67,7 +67,6 @@ public class ProductService {
 
         try {
             Map<?, ?> uploadResult = cloudinary.uploader().upload(imageFile.getBytes(), ObjectUtils.emptyMap());
-            logger.info("Print Uploaded Map"+uploadResult);
             String imageUrl = (String) uploadResult.get("secure_url");
 
             Product product = new Product();
@@ -95,7 +94,7 @@ public class ProductService {
 
             Product savedProduct = productRepository.save(product);
 
-            return ResponseEntity.status(HttpStatus.OK).body(savedProduct.getProductName() + " has been created successfully under " +savedProduct.getCategory() + " category" );
+            return ResponseEntity.status(HttpStatus.CREATED).body(savedProduct.getProductName() + " has been created successfully under " +savedProduct.getCategory() + " category" );
         } catch (IOException e) {
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("Failed to process product upload.");
         }
@@ -109,7 +108,6 @@ public class ProductService {
         User user = userRepository.findById(userId).orElseThrow(() -> new ResourceNotFoundException("User", "id", userId));
         Optional<ShoppingCart> existingCartEntry = shoppingCartRepository.findByProductAndUser(product, user);
         if (existingCartEntry.isPresent()) {
-            logger.info("{} has already been added to your shopping list", product.getProductName());
             throw new BadRequestException("Sorry! You have already added this product to your shopping cart");
         }
         ShoppingCart cart = new ShoppingCart();
@@ -178,7 +176,6 @@ public class ProductService {
                 })
                 .collect(Collectors.toList());
         cartCheckout.setCart(cartItems);
-        logger.warn("cartCheckout " + cartCheckout);
 
         cartCheckoutRepository.save(cartCheckout);
 
@@ -414,8 +411,8 @@ public class ProductService {
         }).collect(Collectors.toList());
     }
 
-    public Optional<Product> getProduct(Long productId) {
-        return productRepository.findById(productId);
+    public Product getProduct(Long productId) {
+        return productRepository.findById(productId).orElseThrow(() -> new ProductNotFoundException(productId));
     }
 
 

@@ -16,7 +16,7 @@ import io.swagger.v3.oas.annotations.servers.Server;
 //                        url = "coming soon"
                 ),
                 description = "Documentation For Row-buy Ecommerce Spring Application",
-                title = "Jumia Doc - Rowland",
+                title = "Row-buy Doc - Rowland",
                 version = "1.0"
         ),
         servers = {

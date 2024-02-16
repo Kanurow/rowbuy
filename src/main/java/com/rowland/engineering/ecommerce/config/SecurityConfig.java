@@ -59,27 +59,28 @@ public class SecurityConfig {
                 .authenticationEntryPoint(unauthorizedHandler)
                 .and()
                 .authorizeHttpRequests()
-                .requestMatchers("/api/v1/auth/**",
-                        "/api/v1/products/supermarket",
-                        "/api/v1/products/all",
-                        "/api/v1/products/computing",
-                        "/api/v1/products/travels",
-                        "/api/v1/products/babyProducts",
-                        "/api/v1/products/appliances",
-                        "/api/v1/products/books",
-                        "/api/v1/products/electronics",
-                        "/api/v1/products/others",
-                        "/api/v1/products/phonesAndTablets",
-                        "/api/v1/products/paged/**",
-                        "/api/v1/products/view/**",
-                        "/api/v1/users/getVendors",
-                        "/api/v1/products/vendor/**",
+                .requestMatchers("/api/auth/**",
+                        "*/products/all",
+                        "*/products/supermarket",
+                        "*/products/computing",
+                        "*/products/travels",
+                        "*/products/babyProducts",
+                        "*/products/appliances",
+                        "*/products/books",
+                        "*/products/electronics",
+                        "*/products/others",
+                        "*/products/phonesAndTablets",
+                        "*/products/paged/**",
+                        "*/products/view/**",
+                        "*/users/getVendors",
+                        "*/products/vendor/**",
+                        "*/products/vendors/**",
                         "/v3/api-docs",
                         "/actuator/**",
                         "/prometheus/**",
                         "/v3/api-docs/**",
                         "/swagger-ui/**",
-                        "/swagger-ui.html"
+                        "swagger-ui.html"
                 )
                 .permitAll()
                 .anyRequest()

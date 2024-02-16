@@ -5,45 +5,52 @@ import com.rowland.engineering.ecommerce.model.*;
 import com.rowland.engineering.ecommerce.repository.ProductRepository;
 import com.rowland.engineering.ecommerce.repository.RoleRepository;
 import com.rowland.engineering.ecommerce.repository.UserRepository;
-import jakarta.annotation.PostConstruct;
 import lombok.RequiredArgsConstructor;
+import org.springframework.boot.CommandLineRunner;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Component;
-
 import java.util.Arrays;
 import java.util.HashSet;
 import java.util.List;
 
-
+import static com.rowland.engineering.ecommerce.model.RoleName.ROLE_ADMIN;
+import static com.rowland.engineering.ecommerce.model.RoleName.ROLE_USER;
 
 @Component
 @RequiredArgsConstructor
-public class DataInitializer {
+public class DataInitializer implements CommandLineRunner {
 
     private final RoleRepository roleRepository;
     private final ProductRepository productRepository;
     private final UserRepository userRepository;
     private final PasswordEncoder passwordEncoder;
 
-    @PostConstruct
-    public void init() {
-        try {
-            List<Role> roles = Arrays.asList(
-                    new Role(RoleName.ROLE_USER),
-                    new Role(RoleName.ROLE_ADMIN)
-            );
-            roleRepository.saveAll(roles);
-            persistUsers();
-            persistProducts();
-        } catch (Exception e) {
-            System.err.println("Error during data initialization: " + e.getMessage());
-        }
+    @Override
+    public void run(String... args) throws Exception {
+        List<Role> roles = Arrays.asList(
+                new Role(ROLE_USER),
+                new Role(ROLE_ADMIN)
+        );
+        roleRepository.saveAll(roles);
+        persistUsers();
+        persistProducts();
     }
 
     private void persistUsers() {
-
         User user1 = User.builder()
                 .id(1L)
+                .firstName("Rowland")
+                .lastName("Kanu")
+                .dateOfBirth("1996-10-05")
+                .username("flames")
+                .email("kanurowland92@gmail.com")
+                .password(passwordEncoder.encode("rowland12"))
+                .mobile("+2348143358911")
+                .isVendor("False")
+                .build();
+
+        User user2 = User.builder()
+                .id(2L)
                 .firstName("Samuel")
                 .lastName("Kanu")
                 .dateOfBirth("1999-03-15")
@@ -51,15 +58,20 @@ public class DataInitializer {
                 .email("kanusam@gmail.com")
                 .password(passwordEncoder.encode("sammy12"))
                 .mobile("+234121212")
-                .isVendor("False")
+                .isVendor("True")
+                .vendorCompany("Jumia Inc Ltd")
+                .territory("NIGERIA")
                 .build();
 
         Role roleUser = roleRepository.findByName(RoleName.ROLE_USER)
                 .orElseThrow(() -> new AppException("User Role not set."));
+        Role roleAdmin = roleRepository.findByName(RoleName.ROLE_ADMIN)
+                .orElseThrow(() -> new AppException("Admin Role not set."));
 
         user1.setRoles(new HashSet<>(List.of(roleUser)));
+        user2.setRoles(new HashSet<>(List.of(roleAdmin)));
 
-        userRepository.save(user1);
+        userRepository.saveAll(List.of(user1, user2));
 
     }
 
@@ -67,10 +79,10 @@ public class DataInitializer {
         Product product1 = Product.builder()
                 .productName("Blazer")
                 .category(Category.OTHERS)
-                .sellingPrice(1000.0)
+                .sellingPrice(900.0)
                 .amountDiscounted(100.0)
                 .percentageDiscount(10)
-                .quantity(25)
+                .quantity(20)
                 .description("Polo Wool Twill Blazer.")
                 .imageUrl("https://www.optimized-rlmedia.io/is/image/PoloGSI/s7-1189461_lifestyle?$rl_df_pdp_5_7_lif$")
                 .userId(2L)
@@ -80,7 +92,7 @@ public class DataInitializer {
                 .productName("Corduroy Trouser")
                 .category(Category.OTHERS)
                 .sellingPrice(500.0)
-                .amountDiscounted(250.0)
+                .amountDiscounted(500.0)
                 .percentageDiscount(50)
                 .quantity(100)
                 .description("Stretch Slim Fit Corduroy Trouser.")
@@ -92,7 +104,7 @@ public class DataInitializer {
                 .productName("Washing Machine")
                 .category(Category.APPLIANCES)
                 .sellingPrice(36000.0)
-                .amountDiscounted(3600.0)
+                .amountDiscounted(4000.0)
                 .percentageDiscount(10)
                 .quantity(12)
                 .description("Washing machine with a sleek design.")
@@ -103,7 +115,7 @@ public class DataInitializer {
         Product product4 = Product.builder()
                 .productName("Iphone X")
                 .category(Category.PHONES)
-                .sellingPrice(90000.0)
+                .sellingPrice(90000.09)
                 .amountDiscounted(0.0)
                 .percentageDiscount(0)
                 .quantity(56)
@@ -185,7 +197,7 @@ public class DataInitializer {
                 .productName("Milo Chocolate")
                 .category(Category.SUPERMARKET)
                 .sellingPrice(3000.0)
-                .amountDiscounted(600.0)
+                .amountDiscounted(300.0)
                 .percentageDiscount(20)
                 .quantity(33)
                 .description("Chocolate milk top brand.")
@@ -200,7 +212,7 @@ public class DataInitializer {
                 .amountDiscounted(1500.0)
                 .percentageDiscount(50)
                 .quantity(30)
-                .description("Body lotion top brand.")
+                .description("Chocolate milk top brand.")
                 .imageUrl("https://e7.pngegg.com/pngimages/281/637/png-clipart-nivea-nourishing-body-lotion-nivea-nourishing-body-lotion-nivea-nourishing-body-milk-400-ml-400-ml-cream-body-milk-poster-cream-body-wash.png")
                 .userId(2L)
                 .build();
@@ -216,6 +228,7 @@ public class DataInitializer {
                 .userId(2L)
                 .build();
         productRepository.saveAll(List.of(product1, product2, product3, product4, product5, product6, product7, product8, product9, product10, product11, product12, product13));
+
         System.out.println("Products persisted to the database.");
     }
 }

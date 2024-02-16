@@ -1,7 +1,11 @@
 package com.rowland.engineering.ecommerce.controller;
 
-
+import com.fasterxml.jackson.databind.ser.FilterProvider;
+import com.fasterxml.jackson.databind.ser.PropertyFilter;
+import com.fasterxml.jackson.databind.ser.impl.SimpleBeanPropertyFilter;
+import com.fasterxml.jackson.databind.ser.impl.SimpleFilterProvider;
 import com.rowland.engineering.ecommerce.dto.*;
+import com.rowland.engineering.ecommerce.model.Category;
 import com.rowland.engineering.ecommerce.model.User;
 import com.rowland.engineering.ecommerce.security.CurrentUser;
 import com.rowland.engineering.ecommerce.security.UserPrincipal;
@@ -11,6 +15,7 @@ import io.swagger.v3.oas.annotations.security.SecurityRequirement;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
@@ -22,7 +27,7 @@ import java.util.Optional;
 
 @CrossOrigin("*")
 @RestController
-@RequestMapping("/api/v1/users")
+@RequestMapping("/api/users")
 @RequiredArgsConstructor
 @SecurityRequirement(name = "bearerAuth")
 @Tag(name = "User")
@@ -91,6 +96,15 @@ public class UserController {
         return userService.updateUserInformation(companyLogo,  profilePicture,  userId, vendorCompany,  territory, mobile, email, username, lastName , firstName);
 
     }
+
+    @PatchMapping("/change-password")
+    public ResponseEntity<String> changePassword(@CurrentUser UserPrincipal userPrincipal,
+            @RequestBody ChangePasswordRequest changePasswordRequest) {
+        userService.changePassword(changePasswordRequest, userPrincipal);
+        return new ResponseEntity<>("Password changed successfully!", HttpStatus.ACCEPTED);
+    }
+
+
 
 
 }

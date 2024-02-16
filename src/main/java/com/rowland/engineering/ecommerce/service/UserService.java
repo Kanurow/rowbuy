@@ -4,6 +4,7 @@ import com.cloudinary.Cloudinary;
 import com.cloudinary.utils.ObjectUtils;
 import com.rowland.engineering.ecommerce.dto.*;
 import com.rowland.engineering.ecommerce.exception.BadRequestException;
+import com.rowland.engineering.ecommerce.exception.PasswordMismatchException;
 import com.rowland.engineering.ecommerce.model.Product;
 import com.rowland.engineering.ecommerce.model.User;
 import com.rowland.engineering.ecommerce.repository.UserRepository;
@@ -14,6 +15,7 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 
@@ -29,7 +31,7 @@ import java.util.stream.Collectors;
 public class UserService {
 
     private final UserRepository userRepository;
-
+    private final PasswordEncoder passwordEncoder;
 
     private Cloudinary cloudinary;
 
@@ -115,43 +117,45 @@ public class UserService {
             Map<?, ?> uploadProfilePicture = cloudinary.uploader().upload(profilePicture.getBytes(), ObjectUtils.emptyMap());
             String profilePictureUrl = (String) uploadProfilePicture.get("secure_url");
 
-            User foundUser = userRepository.getReferenceById(Long.valueOf(userId));
+            User foundUser = userRepository.findById(Long.valueOf(userId)).orElseThrow(() -> new UserNotfoundException("User does not exist"));
 
 
-            User userUpdatedInfo = User.builder()
-                    .id(Long.valueOf(userId))
-                    .firstName(firstName)
-                    .lastName(lastName)
-                    .mobile(mobile)
-                    .email(email)
-                    .username(username)
-                    .build();
+            foundUser.setFirstName(firstName);
+            foundUser.setLastName(lastName);
+            foundUser.setMobile(mobile);
+            foundUser.setEmail(email);
+            foundUser.setUsername(username);
 
             if (Objects.equals(foundUser.getIsVendor(), "True")) {
-                userUpdatedInfo.setIsVendor(foundUser.getIsVendor());
-                userUpdatedInfo.setRoles(foundUser.getRoles());
-                userUpdatedInfo.setDateOfBirth(foundUser.getDateOfBirth());
-                userUpdatedInfo.setVendorCompany(vendorCompany);
-                userUpdatedInfo.setCompanyLogoUrl(companyLogoUrl);
-                userUpdatedInfo.setProfilePictureUrl(profilePictureUrl);
-                userUpdatedInfo.setTerritory(territory);
-                userUpdatedInfo.setPassword(foundUser.getPassword());
+                foundUser.setVendorCompany(vendorCompany);
+                foundUser.setCompanyLogoUrl(companyLogoUrl);
+                foundUser.setProfilePictureUrl(profilePictureUrl);
+                foundUser.setTerritory(territory);
             } else {
-                userUpdatedInfo.setIsVendor("False");
-                userUpdatedInfo.setRoles(foundUser.getRoles());
-                userUpdatedInfo.setDateOfBirth(foundUser.getDateOfBirth());
-                userUpdatedInfo.setVendorCompany(foundUser.getVendorCompany());
-                userUpdatedInfo.setCompanyLogoUrl("Not A Vendor");
-                userUpdatedInfo.setProfilePictureUrl("Not A Vendor");
-                userUpdatedInfo.setTerritory(foundUser.getTerritory());
+                foundUser.setVendorCompany("Not A Vendor");
+                foundUser.setCompanyLogoUrl("Not A Vendor");
+                foundUser.setProfilePictureUrl(profilePictureUrl);
+                foundUser.setTerritory("Not A Vendor");
             }
 
 
-            User savedUserUpdatedInfo = userRepository.save(userUpdatedInfo);
+            User savedUserUpdatedInfo = userRepository.save(foundUser);
 
             return ResponseEntity.status(HttpStatus.OK).body(savedUserUpdatedInfo.getFirstName() + " has updated profile information");
         } catch (IOException e) {
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("Failed to update new user details.");
         }
+    }
+
+    public void changePassword(ChangePasswordRequest changePasswordRequest,
+                               UserPrincipal userPrincipal) {
+        User referenceById = userRepository.getReferenceById(userPrincipal.getId());
+        if (!passwordEncoder.matches(changePasswordRequest.getCurrentPassword(), referenceById.getPassword())){
+            throw new PasswordMismatchException("Wrong password: current password incorrect!");
+        } else if (!changePasswordRequest.getNewPassword().equals(changePasswordRequest.getConfirmPassword())) {
+            throw new PasswordMismatchException("Error: New password and confirmation password mismatch!.");
+        }
+        referenceById.setPassword(passwordEncoder.encode(changePasswordRequest.getNewPassword()));
+        userRepository.save(referenceById);
     }
 }

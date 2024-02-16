@@ -21,5 +21,8 @@ public interface CartCheckoutRepository extends JpaRepository<CartCheckout, Long
     @Query("SELECT c FROM CartCheckout$CartItem c WHERE c.productId IN :productIds")
     List<CartCheckout.CartItem> findCartItemsByProductIds(@Param("productIds") List<Long> productIds);
 
+//    @Query("SELECT c FROM `CartCheckout$CartItem` c WHERE c.productId IN :productIds")
+//    List<CartCheckout.CartItem> findCartItemsByProductIds(@Param("productIds") List<Long> productIds);
+
 }
 

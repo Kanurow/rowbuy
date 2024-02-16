@@ -85,7 +85,6 @@ public class ProductController {
             summary = "Enables authorized users with admin role to create products"
     )
     @PostMapping("/createProduct")
-    @ResponseStatus(HttpStatus.CREATED)
     public ResponseEntity<String> createProductWithImg(@Valid @RequestParam("imageFile") MultipartFile imageFile,
                                                 @RequestParam("productName") String productName,
                                                 @RequestParam("price") Double price,
@@ -103,8 +102,8 @@ public class ProductController {
             summary = "View complete product information of selected product"
     )
     @GetMapping("/view/{productId}")
-    public ResponseEntity<Optional<Product>> getProduct(@PathVariable Long productId) {
-        Optional<Product> allProducts = productService.getProduct(productId);
+    public ResponseEntity<Product> getProduct(@PathVariable Long productId) {
+        Product allProducts = productService.getProduct(productId);
         return ResponseEntity.status(HttpStatus.OK).body(allProducts);
     }
 
@@ -258,7 +257,7 @@ public class ProductController {
             summary = "Users vendor Id to get products created by vendor"
     )
     @GetMapping("/vendor/{userId}")
-    public ResponseEntity<List<ProductResponse>> getAllVendorsProducts(
+    public ResponseEntity<List<ProductResponse>> getAllPagedVendorsProducts(
 
             @PathVariable String userId) {
         List<ProductResponse> allProducts = productService.getAllVendorProducts(userId);
